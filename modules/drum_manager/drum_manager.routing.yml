@@ -1,0 +1,61 @@
+drums_list:
+  path: '/admin/content/drums'
+  defaults:
+    _controller: '\Drupal\drum_manager\Controller\AdminController::content'
+  requirements:
+    _permission: 'access drums content'
+
+drums_add:
+  path: '/admin/content/drums/add'
+  defaults:
+    _form: '\Drupal\drum_manager\AddForm'
+    _title: 'Create drum'
+  requirements:
+    _permission: 'edit drums content'
+
+drums_edit:
+  path: 'admin/content/drums/edit/{id}'
+  defaults:
+    _form: '\Drupal\drum_manager\AddForm'
+    _title: 'Edit drum'
+  requirements:
+    _permission: 'edit drums content'
+
+drums_delete:
+  path: '/admin/content/drums/delete/{id}'
+  defaults:
+    _form: 'Drupal\drum_manager\DeleteForm'
+    _title: 'Delete drum'
+  requirements:
+    _permission: 'delete drums content'
+
+texture_groups_list:
+  path: '/admin/content/texture_groups'
+  defaults:
+    _controller: '\Drupal\drum_manager\Controller\AdminController::content'
+  requirements:
+    _permission: 'access texture groups content'
+
+texture_groups_add:
+  path: '/admin/content/texture_groups/add'
+  defaults:
+    _form: '\Drupal\drum_manager\AddTextureGroupForm'
+    _title: 'Create texture group'
+  requirements:
+    _permission: 'edit texture groups content'
+
+texture_groups_edit:
+  path: 'admin/content/drums/edit/{id}'
+  defaults:
+    _form: '\Drupal\drum_manager\AddTextureGroupForm'
+    _title: 'Edit texture group'
+  requirements:
+    _permission: 'edit texture groups content'
+
+texture_groups_delete:
+  path: '/admin/content/texture_groups/delete/{id}'
+  defaults:
+    _form: 'Drupal\drum_manager\DeleteTextureGroupForm'
+    _title: 'Delete texture group'
+  requirements:
+    _permission: 'delete texture groups content'

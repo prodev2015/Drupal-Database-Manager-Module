@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Contains drum_viewer.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+//
+/**
+ * Implements hook_help().
+ */
+function drum_viewer_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the drum_viewer module.
+    case 'help.page.drum_viewer_block':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('custom module to add your own blocks') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+// \Drupal::service('module_installer')->install(['page_manager_ui']);
+
+function drum_viewer_theme($existing, $type, $theme, $path) {
+
+
+$variables = array(
+    'bloque' =>array(
+      'variables' => NULL,
+      'template' => 'bloque',
+    ),
+  );
+
+  return $variables;
+
+
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+
+function drum_viewer_preprocess(&$variables) {
+  global $base_root, $base_path;
+  $variables['image1'] = $base_root . $base_path . drupal_get_path('module', 'drum_viewer') . '/images/1.png';
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function drum_viewer_page_attachments(array &$page) {
+  global $base_root, $base_path;
+  $page['#attached']['drupalSettings']['basePath'] = $base_root . $base_path . drupal_get_path('module', 'drum_viewer');
+}

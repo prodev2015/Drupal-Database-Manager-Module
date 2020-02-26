@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\drum_manager\drums.install.
+ */
+
+/**
+ * Drupal Drums module DB schema.
+ *
+ * @return array
+ *   Drums DB schema.
+ */
+function drum_manager_schema() {
+  $schema['drums'] = [
+    'description' => 'Store Drums',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => "Primary key: Drum's unique ID",
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 150,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => "Drum's Name",
+      ],
+      'textures' => [
+          'type' => 'varchar',
+          'not null' => FALSE,
+          'description' => "texture IDs",
+        ],
+
+      'model' => [
+        'type' => 'varchar',
+        'default' => '',
+        'description' => "Drum's Model",
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema['texture_group'] = [
+    'description' => 'Store Texture Groups',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => "Primary key: Drum's unique ID",
+      ],
+
+      'name' => [
+        'type' => 'varchar',
+        'length' => 150,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => "Texture's Name",
+      ],
+
+      'tum' => [
+        'type' => 'varchar',
+        'default' => '',
+        'description' => "Tum Texture",
+      ],
+
+      'snare' => [
+        'type' => 'varchar',
+        'default' => '',
+        'description' => "Snare Texture",
+      ],
+      'floor' => [
+        'type' => 'varchar',
+        'default' => '',
+        'description' => "Floor Texture",
+      ],
+      'bass' => [
+         'type' => 'varchar',
+         'default' => '',
+         'description' => "Bass Texture",
+       ],
+       'thumbnail' => [
+          'type' => 'varchar',
+          'default' => '',
+          'description' => "Thumbnail",
+        ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+
+  return $schema;
+}

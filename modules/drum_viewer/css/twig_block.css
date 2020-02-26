@@ -1,0 +1,118 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.app {
+    position: relative;
+    box-sizing: border-box;
+    height: calc(100% - 60px);
+    padding: 30px;
+}
+
+.panel {
+    box-sizing: border-box;
+    width: 400px;
+    height: 300px;
+    background: #fff;
+    display: flex;
+    border-radius: 3px;
+}
+
+.sidebar {
+    flex: 0 0 320px;
+    padding: 0 20px;
+    color: #555;
+    line-height: 1.5;
+}
+.sidebar .notes {
+    font-size: 13px;
+    color: #888;
+}
+
+.viewer {
+    position: relative;
+    flex: 1 1 auto;
+    background: #ccc;
+}
+
+#api-frame {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.options,
+.select {
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: 15px;
+    transform: translate(-50%);
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+.select {
+    bottom: 20px;
+}
+
+.options__option {
+    display: inline-block;
+    position: relative;
+}
+
+.options__option input {
+    opacity: 0;
+    position: absolute;
+}
+
+.options__option img {
+    display: inline-block;
+    margin: 0 10px;
+    width: 60px;
+    height: 60px;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    text-indent: -1000px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+}
+
+@media (max-device-width: 600px) {
+    .options__option img {
+        width: 90px;
+        height: 90px;
+        margin-left: 60px;
+    }
+}
+
+.options__option input:checked + img {
+    border: 4px solid white;
+}
+/* .options__option img[class*='green'] {
+    background: #80b845;
+}
+.options__option img[class*='red'] {
+    background: #35190B;
+}
+.options__option img[class*='blue'] {
+    background: #2c4463;
+}
+.options__option img[class*='lightblue'] {
+    background: #70c0e7;
+} */
+
+.options__option img {
+    background: white;
+}

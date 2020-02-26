@@ -1,0 +1,14 @@
+drums_list:
+  title: Drums
+  description: Drum Manager Module
+  parent: system.admin_content
+  route_name: drums_list
+  weight: 100
+
+texture_groups_list:
+  title: Drum Texture Group
+  description: Drum Manager Module
+  parent: system.admin_content
+  route_name: texture_groups_list
+  weight: 100
+

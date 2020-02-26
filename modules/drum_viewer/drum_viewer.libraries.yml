@@ -1,0 +1,16 @@
+drum_viewer_block:
+  version: 1.x
+  css:
+    theme:
+      css/twig_block.css: {}
+  js:
+    js/augment.js: {}
+    js/gl-matrix.js: {}
+    js/qwest.min.js: {}
+    js/skfb-viewer-plus.js: {}
+    js/sketchfab-viewer-1.1.0.js: {}
+    js/block.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

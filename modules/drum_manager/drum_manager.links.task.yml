@@ -1,0 +1,11 @@
+drums_list:
+  title: Drums
+  route_name: drums_list
+  base_route: system.admin_content
+  weight: 100
+
+texture_groups_list:
+  title: Drum Texture Groups
+  route_name: texture_groups_list
+  base_route: system.admin_content
+  weight: 100

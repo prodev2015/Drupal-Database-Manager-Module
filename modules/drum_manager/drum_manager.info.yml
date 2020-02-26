@@ -1,0 +1,13 @@
+name: Drum Manager
+description: 'Add, Edit, Delete Drums'
+type: module
+# core: '8.x'
+package: Drum Set
+dependencies:
+  - drupal:user
+
+# Information added by Drupal.org packaging script on 2019-07-29
+version: '8.x-1.2'
+core: '8.x'
+project: 'drum_manager'
+datestamp: 1564405907
