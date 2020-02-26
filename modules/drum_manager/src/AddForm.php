@@ -170,58 +170,62 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
 
     // texture table
     // Table header.
-    $header = [
-      'id' => $this->t('Id'),
-      'name' => $this->t('texture name'),
-      'operations' => $this->t('Delete'),
-    ];
-    $rows = [];
-    if($drum)
-    {
-      foreach ($this->storage->getAllTextures($drum->id) as $content) {
-        // Row with attributes on the row and some of its cells.
-        //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
-        //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
-
-        $rows[] = [
-          'data' => [
-            //Link::fromTextAndUrl($content->id, $editUrl)->toString(),
-            $content->id,
-            $content->name,
-            "delete"
-            //Link::fromTextAndUrl($this->t('Delete'), $deleteUrl)->toString(),
-          ],
-        ];
-      }
-    }else
-    {
-      for($i = 0; $i < count($this->temp_textures); $i++) {
-        $rows[] = [
-          'data' => [
-            $i,
-            $this->temp_textures[$i],
-            "delete"
-          ],
-        ];
-      }
-    }
-
-    $form['texture_table'] = [
-      '#type' => 'table',
-      '#title' => t('Textures'),
-      '#header' => $header,
-      '#rows' => $rows,
-      '#attributes' => [
-        'id' => 'texture-table',
-      ],
-    ];
+//    $header = [
+//      'id' => $this->t('Id'),
+//      'name' => $this->t('texture name'),
+//      'operations' => $this->t('Delete'),
+//    ];
+//    $rows = [];
+//    if($drum)
+//    {
+//      foreach ($this->storage->getAllTextures($drum->id) as $content) {
+//        // Row with attributes on the row and some of its cells.
+//        //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
+//        //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
+//
+//        $rows[] = [
+//          'data' => [
+//            //Link::fromTextAndUrl($content->id, $editUrl)->toString(),
+//            $content->id,
+//            $content->name,
+//            "delete"
+//            //Link::fromTextAndUrl($this->t('Delete'), $deleteUrl)->toString(),
+//          ],
+//        ];
+//      }
+//    }else
+//    {
+//      for($i = 0; $i < count($this->temp_textures); $i++) {
+//        $rows[] = [
+//          'data' => [
+//            $i,
+//            $this->temp_textures[$i],
+//            "delete"
+//          ],
+//        ];
+//      }
+//    }
+//
+//    $form['texture_table'] = [
+//      '#type' => 'table',
+//      '#title' => t('Textures'),
+//      '#header' => $header,
+//      '#rows' => $rows,
+//      '#attributes' => [
+//        'id' => 'texture-table',
+//      ],
+//    ];
     // Texture Table //
 
     // Texture Name
     $form['texture_name'] = [
-      '#type' => 'textfield',
+      '#type' => 'select',
       '#title' => $this->t('Texture Name'),
-      '#default_value' => '',
+      '#options' => [
+        '1' => $this->t('Contact'),
+        '2' => $this->t('Other'),
+        '3' => $this->t('Customer Support'),
+      ],
     ];
     // Texture Name //
 
