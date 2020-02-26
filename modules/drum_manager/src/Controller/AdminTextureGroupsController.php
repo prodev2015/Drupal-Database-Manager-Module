@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Renderer;
 use Drupal\drum_manager\DrumsStorage;
+use Drupal\drum_manager\TextureGroupsStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,14 +21,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @package Drupal\drum_manager\Controller
  */
-class AdminController extends ControllerBase {
+class AdminTextureGroupsController extends ControllerBase {
 
   use StringTranslationTrait;
 
   /**
    * Our database repository service.
    *
-   * @var \Drupal\drum_manager\DrumsStorage
+   * @var \Drupal\drum_manager\TextureGroupsStorage
    */
   protected $storage;
 
@@ -51,12 +52,12 @@ class AdminController extends ControllerBase {
   /**
    * AdminController constructor.
    *
-   * @param \Drupal\drum_manager\DrumsStorage $storage
+   * @param \Drupal\drum_manager\TextureGroupsStorage $storage
    *   Request stack service for the container.
    * @param Drupal\Core\Render\Renderer $renderer
    *   Renderer service for the container.
    */
-  public function __construct(DrumsStorage $storage, Renderer $renderer) {
+  public function __construct(TextureGroupsStorage $storage, Renderer $renderer) {
     $this->storage = $storage;
     $this->renderer = $renderer;
   }
@@ -68,8 +69,8 @@ class AdminController extends ControllerBase {
    *   Content table.
    */
   public function content() {
-    $url = Url::fromRoute('drums_add');
-    $add_link = '<p>' . Link::fromTextAndUrl($this->t('Add Drum'), $url)->toString() . '</p>';
+    $url = Url::fromRoute('texture_groups_add');
+    $add_link = '<p>' . Link::fromTextAndUrl($this->t('Add Texture Group'), $url)->toString() . '</p>';
 
     $text = [
       '#type' => 'markup',
@@ -79,14 +80,14 @@ class AdminController extends ControllerBase {
     // Table header.
     $header = [
       'id' => $this->t('Id'),
-      'name' => $this->t('drum name'),
+      'name' => $this->t('texture group name'),
       'operations' => $this->t('Delete'),
     ];
     $rows = [];
-    foreach ($this->storage->getAllDrums() as $content) {
+    foreach ($this->storage->getAll() as $content) {
       // Row with attributes on the row and some of its cells.
-      $editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
-      $deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
+      $editUrl = Url::fromRoute('texture_groups_edit', ['id' => $content->id]);
+      $deleteUrl = Url::fromRoute('texture_groups_delete', ['id' => $content->id]);
 
       $rows[] = [
         'data' => [
@@ -101,7 +102,7 @@ class AdminController extends ControllerBase {
       '#header' => $header,
       '#rows' => $rows,
       '#attributes' => [
-        'id' => 'drums-table',
+        'id' => 'texture-groups-table',
       ],
     ];
     return [

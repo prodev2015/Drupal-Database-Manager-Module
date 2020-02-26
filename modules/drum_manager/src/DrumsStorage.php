@@ -108,7 +108,7 @@ class DrumsStorage extends ControllerBase {
    * @return int|null
    *   DB insert query return value.
    */
-  public function add($name, $texture_groups, $model) {
+  public function add($name, $texture_groups = null, $model = null) {
     $fields = [
       'name' => $name,
       'texture_groups' => implode(',' ,$texture_groups),
@@ -136,7 +136,7 @@ class DrumsStorage extends ControllerBase {
    * @param string $name
    *   Drum's name.
    */
-  public function edit($id, $name, $texture_groups, $model) {
+  public function edit($id, $name, $texture_groups = null, $model = null) {
     $fields = [
       'name' => $name,
       'texture_groups' => implode(',' , $texture_groups),

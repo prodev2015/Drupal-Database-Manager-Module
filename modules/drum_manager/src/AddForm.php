@@ -222,14 +222,20 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     // Texture Table //
 
     // Texture Name
+    $texture_group_names_list = [];
+    foreach ($this->texture_groups_storage->getAll() as $content) {
+      array_push($texture_group_names_list, $this->t($content->name));
+    }
+
     $form['texture_name'] = [
       '#type' => 'select',
       '#title' => $this->t('Texture Name'),
-      '#options' => [
-        '1' => $this->t('Contact'),
-        '2' => $this->t('Other'),
-        '3' => $this->t('Customer Support'),
-      ],
+//      '#options' => [
+//        '1' => $this->t('Contact'),
+//        '2' => $this->t('Other'),
+//        '3' => $this->t('Customer Support'),
+//      ],
+      '#options' => $texture_group_names_list
     ];
     // Texture Name //
 
@@ -265,31 +271,30 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $input = $form_state->getUserInput();
-    if ($form_state->getTriggeringElement()['#name'] == $this->t('addTextureButton')) {
-      $texture_name = $form_state->getValue('texture_name');
-      if (!empty($this->id)) {
-
-      } else
-      {
-        array_push($this->temp_textures, $texture_name);
-      }
-      return;
-    }
+//    if ($form_state->getTriggeringElement()['#name'] == $this->t('addTextureButton')) {
+//      $texture_name = $form_state->getValue('texture_name');
+//      if (!empty($this->id)) {
+//
+//      } else
+//      {
+//        array_push($this->temp_textures, $texture_name);
+//      }
+//      return;
+//    }
 
     $account = $this->currentUser;
     $name = $form_state->getValue('name');
 
     $uid = $account->id();
     if (!empty($this->id)) {
-      $return = $this->storage->edit($this->id, Html::escape($name));
+      $return = $this->drums_storage->edit($this->id, Html::escape($name));
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been edited.'));
       }
     }
     else {
       //$return = $this->storage->add(Html::escape($name), Html::escape($image[0]), $uid);
-      $return = $this->storage->addDrum(Html::escape($name));
+      $return = $this->drums_storage->add(Html::escape($name));
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }
