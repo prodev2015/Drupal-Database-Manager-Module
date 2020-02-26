@@ -53,7 +53,7 @@ class DeleteTextureGroupForm extends ConfirmFormBase {
   /**
    * AdminController constructor.
    *
-   * @param \Drupal\drum_manager\DrumsStorage $storage
+   * @param \Drupal\drum_manager\TextureGroupsStorage $storage
    *   Request stack service for the container.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service for the container.

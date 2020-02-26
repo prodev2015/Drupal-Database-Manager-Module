@@ -5,7 +5,7 @@ namespace Drupal\drum_manager;
 
 /**
  * @file
- * Contains \Drupal\drum_manager\AddForm.
+ * Contains \Drupal\drum_manager\AddTextureGroupForm.
  */
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -56,7 +56,7 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
    */
   protected $id;
 
-  protected $temp_textures = [];
+
 
   /**
    * {@inheritdoc}
@@ -76,14 +76,14 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
   /**
    * AdminController constructor.
    *
-   * @param \Drupal\drum_manager\DrumsStorage $storage
+   * @param \Drupal\drum_manager\TextureGroupsStorage $storage
    *   Request stack service for the container.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Request stack service for the container.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service for the container.
    */
-  public function __construct(DrumsStorage $storage, AccountProxyInterface $current_user, RequestStack $request_stack)
+  public function __construct(TextureGroupsStorage $storage, AccountProxyInterface $current_user, RequestStack $request_stack)
   {
     $this->storage = $storage;
     $this->currentUser = $current_user;
@@ -112,137 +112,95 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
   public function buildForm(array $form, FormStateInterface $form_state)
   {
     $this->id = $this->request()->get('id');
-    $drum = $this->storage->get($this->id);
+    $texture_group = $this->storage->get($this->id);
 
-//    if(!empty($form_state->getValue("image")[0]))
-//    {
-//      global $base_url;
-//      $drum_image = $form_state->getValue("image");
-//      $image_file = file_load($drum_image[0]);
-//
-//      if($image_file){
-//        $form['current_image'] = [
-//          '#type'     => 'markup',
-//          '#markup' => '<img src="' . $base_url . '/sites/drupal-8-8-1.dd/files/images/' . $image_file->getFilename() . '" />'
-//        ];
-//      }else
-//      {
-//        $form['current_image'] = null;
-//      }
-//    }else
-//    {
-//      if(!empty($drums))
-//      {
-//        global $base_url;
-//        $drum_image = $drums->image;
-//        //$image_file = File::load($drum_image);
-//        $image_file = file_load($drum_image);
-//
-//        $form['current_image'] = [
-//          '#type'     => 'markup',
-//          '#markup' => '<img src="' . $base_url . '/sites/drupal-8-8-1.dd/files/images/' . $image_file->getFilename() . '" />'
-//        ];
-//
-//      }else
-//      {
-//        $form['message'] = [
-//          '#markup' => $this->t('You do not currently have a drum image.'),
-//        ];
-//        $form['current_image'] = null;
-//      }
-//    }
+//    $form['name'] = [
+//      '#type' => 'textfield',
+//      '#title' => $this->t('Name'),
+//      '#default_value' => $drum ? $drum->name : '',
+//    ];
 
-
-    $form['name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Name'),
-      '#default_value' => $drum ? $drum->name : '',
-    ];
-
-//    $form['image'] = array(
-//      '#type'          => 'managed_file',
-//      '#title'         => t('Choose Image File'),
-//      '#upload_location' => 'public://images/',
-//      '#default_value' => $drums ? $drums->image : '',
-//      '#description'   => t('Specify an image(s) to display.'),
-//      '#theme' => 'image_widget',
-//      '#preview_image_style' => 'medium',
-//      '#states'        => array(
-//        'visible'      => array(
-//          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
-//        ),
-//      ),
-//    );
-
-    // texture table
-    // Table header.
-    $header = [
-      'id' => $this->t('Id'),
-      'name' => $this->t('texture name'),
-      'operations' => $this->t('Delete'),
-    ];
-    $rows = [];
-    if ($drum) {
-      foreach ($this->storage->getAllTextures($drum->id) as $content) {
-        // Row with attributes on the row and some of its cells.
-        //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
-        //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
-
-        $rows[] = [
-          'data' => [
-            //Link::fromTextAndUrl($content->id, $editUrl)->toString(),
-            $content->id,
-            $content->name,
-            "delete"
-            //Link::fromTextAndUrl($this->t('Delete'), $deleteUrl)->toString(),
-          ],
-        ];
-      }
-    } else {
-      for ($i = 0; $i < count($this->temp_textures); $i++) {
-        $rows[] = [
-          'data' => [
-            $i,
-            $this->temp_textures[$i],
-            "delete"
-          ],
-        ];
-      }
-    }
-
-    $form['texture_table'] = [
-      '#type' => 'table',
-      '#title' => t('Textures'),
-      '#header' => $header,
-      '#rows' => $rows,
-      '#attributes' => [
-        'id' => 'texture-table',
-      ],
-    ];
-    // Texture Table //
-
-    // Texture Name
-    $form['texture_name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Texture Name'),
+    $form['tum'] = array(
+      '#type'          => 'managed_file',
+      '#title'         => t('Tum'),
+      '#upload_location' => 'public://images/',
       '#default_value' => '',
-    ];
-    // Texture Name //
+      '#description'   => t('Specify an image(s) to display.'),
+      '#theme' => 'image_widget',
+      '#preview_image_style' => 'medium',
+      '#states'        => array(
+        'visible'      => array(
+          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+        ),
+      ),
+    );
 
-    // Add Texture Button
-    $form['add_texture_button'] = [
-      '#type' => 'submit',
-      '#value' => $this->t("Add Texture"),
-      '#name' => $this->t('addTextureButton'),
-    ];
-    // Add Texture Button //
+    $form['snare'] = array(
+      '#type'          => 'managed_file',
+      '#title'         => t('Snare'),
+      '#upload_location' => 'public://images/',
+      '#default_value' => '',
+      '#description'   => t('Specify an image(s) to display.'),
+      '#theme' => 'image_widget',
+      '#preview_image_style' => 'medium',
+      '#states'        => array(
+        'visible'      => array(
+          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+        ),
+      ),
+    );
+
+    $form['floor'] = array(
+      '#type'          => 'managed_file',
+      '#title'         => t('Floor'),
+      '#upload_location' => 'public://images/',
+      '#default_value' => '',
+      '#description'   => t('Specify an image(s) to display.'),
+      '#theme' => 'image_widget',
+      '#preview_image_style' => 'medium',
+      '#states'        => array(
+        'visible'      => array(
+          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+        ),
+      ),
+    );
+
+    $form['bass'] = array(
+      '#type'          => 'managed_file',
+      '#title'         => t('Bass'),
+      '#upload_location' => 'public://images/',
+      '#default_value' => '',
+      '#description'   => t('Specify an image(s) to display.'),
+      '#theme' => 'image_widget',
+      '#preview_image_style' => 'medium',
+      '#states'        => array(
+        'visible'      => array(
+          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+        ),
+      ),
+    );
+
+    $form['thumbnail'] = array(
+      '#type'          => 'managed_file',
+      '#title'         => t('Thumbnail'),
+      '#upload_location' => 'public://images/',
+      '#default_value' => '',
+      '#description'   => t('Specify an image(s) to display.'),
+      '#theme' => 'image_widget',
+      '#preview_image_style' => 'medium',
+      '#states'        => array(
+        'visible'      => array(
+          ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+        ),
+      ),
+    );
 
     $form['actions'] = [
       '#type' => 'actions',
     ];
     $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => $drum ? $this->t('Edit') : $this->t('Add'),
+      '#value' => $texture_group ? $this->t('Edit') : $this->t('Add'),
     ];
     return $form;
   }
@@ -263,29 +221,24 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
    */
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
-    $input = $form_state->getUserInput();
-    if ($form_state->getTriggeringElement()['#name'] == $this->t('addTextureButton')) {
-      $texture_name = $form_state->getValue('texture_name');
-      if (!empty($this->id)) {
-
-      } else {
-        array_push($this->temp_textures, $texture_name);
-      }
-      return;
-    }
 
     $account = $this->currentUser;
     $name = $form_state->getValue('name');
+    $tum = $form_state->getValue('tum');
+    $snare = $form_state->getValue('snare');
+    $floor = $form_state->getValue('floor');
+    $bass = $form_state->getValue('bass');
+    $thumbnail = $form_state->getValue('thumbnail');
 
     $uid = $account->id();
     if (!empty($this->id)) {
-      $return = $this->storage->edit($this->id, Html::escape($name));
+      $return = $this->storage->edit($this->id, Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been edited.'));
       }
     } else {
       //$return = $this->storage->add(Html::escape($name), Html::escape($image[0]), $uid);
-      $return = $this->storage->addDrum(Html::escape($name));
+      $return = $this->storage->add(Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }
