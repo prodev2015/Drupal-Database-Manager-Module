@@ -33,7 +33,8 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    *
    * @var \Drupal\drum_manager\DrumsStorage
    */
-  protected $storage;
+  protected $drums_storage;
+  protected $texture_groups_storage;
 
   /**
    * The current user.
@@ -73,15 +74,18 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
   /**
    * AdminController constructor.
    *
-   * @param \Drupal\drum_manager\DrumsStorage $storage
+   * @param \Drupal\drum_manager\DrumsStorage $drums_storage
+   *   Request stack service for the container.
+   * @param \Drupal\drum_manager\TextureGroupsStorage $texture_groups_storage
    *   Request stack service for the container.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Request stack service for the container.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service for the container.
    */
-  public function __construct(DrumsStorage $storage, AccountProxyInterface $current_user, RequestStack $request_stack) {
-    $this->storage = $storage;
+  public function __construct(DrumsStorage $drums_storage, TextureGroupsStorage $texture_groups_storage, AccountProxyInterface $current_user, RequestStack $request_stack) {
+    $this->drums_storage = $drums_storage;
+    $this->texture_groups_storage = $texture_groups_storage;
     $this->currentUser = $current_user;
     $this->requestStack = $request_stack;
   }
