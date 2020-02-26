@@ -53,7 +53,7 @@ class TextureGroupsStorage extends ControllerBase
    */
   public function getAll()
   {
-    $result = $this->connection->select('drums', 's')
+    $result = $this->connection->select('texture_groups', 's')
       ->fields('s')
       ->execute();
     return $result;
@@ -85,7 +85,7 @@ class TextureGroupsStorage extends ControllerBase
    */
   public function get($id)
   {
-    $result = $this->connection->query('SELECT * FROM {drums} WHERE id = :id', [':id' => $id])
+    $result = $this->connection->query('SELECT * FROM {texture_groups} WHERE id = :id', [':id' => $id])
       ->fetchAllAssoc('id');
     if ($result) {
       return $result[$id];
@@ -112,15 +112,19 @@ class TextureGroupsStorage extends ControllerBase
    *   DB insert query.
    *
    */
-  public function add($name, $image, $uid = NULL)
+  public function add($name, $tum, $snare, $floor, $bass, $thumbnail)
   {
     $fields = [
       'name' => $name,
-      'image' => $image,
+      'tum' => $tum,
+      'snare' => $snare,
+      'floor' => $floor,
+      'bass' => $bass,
+      'thumbnail' => $thumbnail,
     ];
     $return_value = NULL;
     try {
-      $return_value = $this->connection->insert('drums')
+      $return_value = $this->connection->insert('texture_groups')
         ->fields($fields)
         ->execute();
     } catch (\Exception $e) {
@@ -139,12 +143,17 @@ class TextureGroupsStorage extends ControllerBase
    * @param string $name
    *   Drum's name.
    */
-  public function edit($id, $name)
+  public function edit($id, $name, $tum, $snare, $floor, $bass, $thumbnail)
   {
     $fields = [
       'name' => $name,
+      'tum' => $tum,
+      'snare' => $snare,
+      'floor' => $floor,
+      'bass' => $bass,
+      'thumbnail' => $thumbnail,
     ];
-    $this->connection->update('drums')
+    $this->connection->update('texture_groups')
       ->fields($fields)
       ->condition('id', $id)
       ->execute();
@@ -158,7 +167,7 @@ class TextureGroupsStorage extends ControllerBase
    */
   public function delete($id)
   {
-    $this->connection->delete('drums')
+    $this->connection->delete('texture_groups')
       ->condition('id', $id)
       ->execute();
   }

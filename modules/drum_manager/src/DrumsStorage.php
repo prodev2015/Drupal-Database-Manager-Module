@@ -54,39 +54,8 @@ class DrumsStorage extends ControllerBase {
       ->execute();
     return $result;
   }
-  /**
-   * Method getAllDrums().
-   *
-   * @return mixed
-   *   DB query.
-   */
-  public function getAllDrums() {
-    $result = $this->connection->query('SELECT * FROM {drums} WHERE parent_id IS NULL ')
-      ->fetchAll();
-    if ($result) {
-      return $result;
-    }
-    else {
-      return FALSE;
-    }
-  }
 
-  /**
-   * Method getAllTextures().
-   *
-   * @return mixed
-   *   DB query.
-   */
-  public function getAllTextures($parent_id) {
-    $result = $this->connection->query('SELECT * FROM {drums} WHERE parent_id = :parent_id ', [':parent_id' => $parent_id])
-      ->fetchAll();
-    if ($result) {
-      return $result;
-    }
-    else {
-      return FALSE;
-    }
-  }
+
   /**
    * Get if $id exists.
    *
@@ -120,56 +89,6 @@ class DrumsStorage extends ControllerBase {
     }
   }
 
-  /**
-   * Add Drum
-   *
-   *
-   *
-  */
-  public function addDrum($name) {
-    $fields = [
-      'name' => $name,
-    ];
-
-    $return_value = NULL;
-    try {
-      $return_value = $this->connection->insert('drums')
-        ->fields($fields)
-        ->execute();
-    }
-    catch (\Exception $e) {
-      $this->messenger()->addMessage($this->t('Insert failed. Message = %message', [
-        '%message' => $e->getMessage(),
-      ]), 'error');
-    }
-    return $return_value;
-  }
-
-  /**
-   * Add Texture
-   *
-   *
-   *
-   */
-  public function addTexture($parent_id, $name) {
-    $fields = [
-      'name' => $name,
-      'parent_id' => $parent_id,
-    ];
-
-    $return_value = NULL;
-    try {
-      $return_value = $this->connection->insert('drums')
-        ->fields($fields)
-        ->execute();
-    }
-    catch (\Exception $e) {
-      $this->messenger()->addMessage($this->t('Insert failed. Message = %message', [
-        '%message' => $e->getMessage(),
-      ]), 'error');
-    }
-    return $return_value;
-  }
 
   /**
    * Add method.
@@ -189,10 +108,11 @@ class DrumsStorage extends ControllerBase {
    * @return int|null
    *   DB insert query return value.
    */
-  public function add($name, $image, $uid = NULL) {
+  public function add($name, $texture_groups, $model) {
     $fields = [
       'name' => $name,
-      'image' => $image,
+      'texture_groups' => implode(',' ,$texture_groups),
+      'model' => $model,
     ];
     $return_value = NULL;
     try {
@@ -216,9 +136,11 @@ class DrumsStorage extends ControllerBase {
    * @param string $name
    *   Drum's name.
    */
-  public function edit($id, $name) {
+  public function edit($id, $name, $texture_groups, $model) {
     $fields = [
       'name' => $name,
+      'texture_groups' => implode(',' , $texture_groups),
+      'model' => $model,
     ];
     $this->connection->update('drums')
       ->fields($fields)

@@ -27,7 +27,7 @@ function drum_manager_schema() {
         'default' => '',
         'description' => "Drum's Name",
       ],
-      'textures' => [
+      'texture_groups' => [
           'type' => 'varchar',
           'not null' => FALSE,
           'description' => "texture IDs",
@@ -42,7 +42,7 @@ function drum_manager_schema() {
     'primary key' => ['id'],
   ];
 
-  $schema['texture_group'] = [
+  $schema['texture_groups'] = [
     'description' => 'Store Texture Groups',
     'fields' => [
       'id' => [
