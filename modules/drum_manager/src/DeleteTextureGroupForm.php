@@ -58,7 +58,7 @@ class DeleteTextureGroupForm extends ConfirmFormBase {
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service for the container.
    */
-  public function __construct(DrumsStorage $storage, RequestStack $request_stack) {
+  public function __construct(TextureGroupsStorage $storage, RequestStack $request_stack) {
     $this->storage = $storage;
     $this->requestStack = $request_stack;
   }
@@ -74,14 +74,14 @@ class DeleteTextureGroupForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'drums_delete';
+    return 'texture_groups_delete';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete drum %id?',
+    return $this->t('Are you sure you want to delete texture group %id?',
       ['%id' => $this->id]);
   }
 
@@ -96,7 +96,7 @@ class DeleteTextureGroupForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('drums_list');
+    return new Url('texture_groups_list');
   }
 
   /**
@@ -114,10 +114,10 @@ class DeleteTextureGroupForm extends ConfirmFormBase {
     if (!empty($this->id)) {
       $return = $this->storage->delete($this->id);
       if ($return) {
-        $this->messenger()->addMessage($this->t('Drum has been removed.'));
+        $this->messenger()->addMessage($this->t('Texture Group has been removed.'));
       }
     }
-    $form_state->setRedirect('drums_list');
+    $form_state->setRedirect('texture_groups_list');
   }
 
 }
