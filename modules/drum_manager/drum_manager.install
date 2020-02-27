@@ -28,13 +28,15 @@ function drum_manager_schema() {
         'description' => "Drum's Name",
       ],
       'texture_groups' => [
-          'type' => 'varchar',
-          'not null' => FALSE,
-          'description' => "texture IDs",
-        ],
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+        'description' => "texture IDs",
+      ],
 
       'model' => [
         'type' => 'varchar',
+        'length' => 255,
         'default' => '',
         'description' => "Drum's Model",
       ],
@@ -61,27 +63,32 @@ function drum_manager_schema() {
 
       'tum' => [
         'type' => 'varchar',
+        'length' => 255,
         'default' => '',
         'description' => "Tum Texture",
       ],
 
       'snare' => [
         'type' => 'varchar',
+        'length' => 255,
         'default' => '',
         'description' => "Snare Texture",
       ],
       'floor' => [
         'type' => 'varchar',
+        'length' => 255,
         'default' => '',
         'description' => "Floor Texture",
       ],
       'bass' => [
          'type' => 'varchar',
+         'length' => 255,
          'default' => '',
          'description' => "Bass Texture",
        ],
        'thumbnail' => [
           'type' => 'varchar',
+          'length' => 255,
           'default' => '',
           'description' => "Thumbnail",
         ],

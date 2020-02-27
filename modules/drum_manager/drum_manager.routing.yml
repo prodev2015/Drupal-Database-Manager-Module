@@ -32,7 +32,7 @@ drums_delete:
 texture_groups_list:
   path: '/admin/content/texture_groups'
   defaults:
-    _controller: '\Drupal\drum_manager\Controller\AdminController::content'
+    _controller: '\Drupal\drum_manager\Controller\AdminTextureGroupsController::content'
   requirements:
     _permission: 'access texture groups content'
 
@@ -45,7 +45,7 @@ texture_groups_add:
     _permission: 'edit texture groups content'
 
 texture_groups_edit:
-  path: 'admin/content/drums/edit/{id}'
+  path: 'admin/content/texture_groups/edit/{id}'
   defaults:
     _form: '\Drupal\drum_manager\AddTextureGroupForm'
     _title: 'Edit texture group'

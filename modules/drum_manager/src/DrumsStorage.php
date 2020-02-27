@@ -55,6 +55,22 @@ class DrumsStorage extends ControllerBase {
     return $result;
   }
 
+  /**
+   * Method getTextures().
+   *
+   * @return mixed
+   *   DB query.
+   */
+  public function getTextureGroupIds($id) {
+    $result = $this->connection->query('SELECT * FROM {drums} WHERE id = :id', [':id' => $id])
+      ->fetchAllAssoc('id');
+    if ($result) {
+      return explode(',', $result[$id]->texture_groups);
+    }
+    else {
+      return FALSE;
+    }
+  }
 
   /**
    * Get if $id exists.

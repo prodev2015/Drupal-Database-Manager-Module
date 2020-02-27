@@ -64,7 +64,7 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
   public static function create(ContainerInterface $container)
   {
     $form = new static(
-      $container->get('drum_manager.storage'),
+      $container->get('drum_manager.texture_groups_storage'),
       $container->get('current_user'),
       $container->get('request_stack')
     );
@@ -119,6 +119,11 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
 //      '#title' => $this->t('Name'),
 //      '#default_value' => $drum ? $drum->name : '',
 //    ];
+    $form['name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Name'),
+      '#default_value' => $texture_group ? $texture_group->name : '',
+    ];
 
     $form['tum'] = array(
       '#type'          => 'managed_file',
@@ -225,10 +230,15 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
     $account = $this->currentUser;
     $name = $form_state->getValue('name');
     $tum = $form_state->getValue('tum');
+    $tum = sizeof($tum) > 0 ? $tum[0] : null;
     $snare = $form_state->getValue('snare');
+    $snare = sizeof($snare) > 0 ? $snare[0] : null;
     $floor = $form_state->getValue('floor');
+    $floor = sizeof($floor) > 0 ? $floor[0] : null;
     $bass = $form_state->getValue('bass');
+    $bass = sizeof($bass) > 0 ? $bass[0] : null;
     $thumbnail = $form_state->getValue('thumbnail');
+    $thumbnail = sizeof($thumbnail) > 0 ? $thumbnail[0] : null;
 
     $uid = $account->id();
     if (!empty($this->id)) {
@@ -243,7 +253,7 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }
     }
-    $form_state->setRedirect('drums_list');
+    $form_state->setRedirect('texture_groups_list');
   }
 
 }

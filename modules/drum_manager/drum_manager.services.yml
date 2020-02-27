@@ -3,6 +3,9 @@
 # Changes here require that the cache be cleared in order to have Drupal notice
 # them.
 services:
-  drum_manager.storage:
+  drum_manager.drums_storage:
     class: Drupal\drum_manager\DrumsStorage
+    arguments: ['@database', '@string_translation', '@messenger']
+  drum_manager.texture_groups_storage:
+    class: Drupal\drum_manager\TextureGroupsStorage
     arguments: ['@database', '@string_translation', '@messenger']

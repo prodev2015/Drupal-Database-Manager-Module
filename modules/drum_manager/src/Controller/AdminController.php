@@ -43,7 +43,7 @@ class AdminController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('drum_manager.storage'),
+      $container->get('drum_manager.drums_storage'),
       $container->get('renderer')
     );
   }
@@ -83,7 +83,7 @@ class AdminController extends ControllerBase {
       'operations' => $this->t('Delete'),
     ];
     $rows = [];
-    foreach ($this->storage->getAllDrums() as $content) {
+    foreach ($this->storage->getAll() as $content) {
       // Row with attributes on the row and some of its cells.
       $editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
       $deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);

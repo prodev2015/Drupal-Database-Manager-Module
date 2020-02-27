@@ -36,6 +36,7 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
   protected $drums_storage;
   protected $texture_groups_storage;
 
+  protected $texture_groups_list = [];
   /**
    * The current user.
    *
@@ -62,7 +63,8 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    */
   public static function create(ContainerInterface $container) {
     $form = new static(
-      $container->get('drum_manager.storage'),
+      $container->get('drum_manager.drums_storage'),
+      $container->get('drum_manager.texture_groups_storage'),
       $container->get('current_user'),
       $container->get('request_stack')
     );
@@ -109,7 +111,7 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $this->id = $this->request()->get('id');
-    $drum = $this->storage->get($this->id);
+    $drum = $this->drums_storage->get($this->id);
 
 //    if(!empty($form_state->getValue("image")[0]))
 //    {
@@ -174,56 +176,58 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
 
     // texture table
     // Table header.
-//    $header = [
-//      'id' => $this->t('Id'),
-//      'name' => $this->t('texture name'),
-//      'operations' => $this->t('Delete'),
-//    ];
-//    $rows = [];
-//    if($drum)
-//    {
-//      foreach ($this->storage->getAllTextures($drum->id) as $content) {
-//        // Row with attributes on the row and some of its cells.
-//        //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
-//        //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
-//
-//        $rows[] = [
-//          'data' => [
-//            //Link::fromTextAndUrl($content->id, $editUrl)->toString(),
-//            $content->id,
-//            $content->name,
-//            "delete"
-//            //Link::fromTextAndUrl($this->t('Delete'), $deleteUrl)->toString(),
-//          ],
-//        ];
-//      }
-//    }else
-//    {
-//      for($i = 0; $i < count($this->temp_textures); $i++) {
-//        $rows[] = [
-//          'data' => [
-//            $i,
-//            $this->temp_textures[$i],
-//            "delete"
-//          ],
-//        ];
-//      }
-//    }
-//
-//    $form['texture_table'] = [
-//      '#type' => 'table',
-//      '#title' => t('Textures'),
-//      '#header' => $header,
-//      '#rows' => $rows,
-//      '#attributes' => [
-//        'id' => 'texture-table',
-//      ],
-//    ];
+    $header = [
+      'id' => $this->t('Id'),
+      'name' => $this->t('texture name'),
+      'operations' => $this->t('Delete'),
+    ];
+    $rows = [];
+    if($drum)
+    {
+      $texture_group_ids =  $this->drums_storage->getTextureGroupIds($drum->id);
+      foreach ($texture_group_ids as $id) {
+        // Row with attributes on the row and some of its cells.
+        //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
+        //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
+        $content = $this->texture_groups_storage->get($id);
+        $rows[] = [
+          'data' => [
+            //Link::fromTextAndUrl($content->id, $editUrl)->toString(),
+            $content->id,
+            $content->name,
+            "delete"
+            //Link::fromTextAndUrl($this->t('Delete'), $deleteUrl)->toString(),
+          ],
+        ];
+      }
+    }else
+    {
+      for($i = 0; $i < count($this->temp_textures); $i++) {
+        $rows[] = [
+          'data' => [
+            $i,
+            $this->temp_textures[$i],
+            "delete"
+          ],
+        ];
+      }
+    }
+
+    $form['texture_table'] = [
+      '#type' => 'table',
+      '#title' => t('Textures'),
+      '#header' => $header,
+      '#rows' => $rows,
+      '#attributes' => [
+        'id' => 'texture-table',
+      ],
+    ];
     // Texture Table //
 
     // Texture Name
     $texture_group_names_list = [];
-    foreach ($this->texture_groups_storage->getAll() as $content) {
+    foreach ($this->texture_groups_storage->getAll()  as $content) {
+      array_push($this->texture_groups_list, $content);
       array_push($texture_group_names_list, $this->t($content->name));
     }
 
@@ -241,9 +245,15 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
 
     // Add Texture Button
     $form['add_texture_button'] = [
-      '#type' => 'submit',
+      '#type' => 'button',
       '#value' => $this->t("Add Texture"),
       '#name' => $this->t('addTextureButton'),
+      //'#submit' => array($this, 'addTextureGroup'),
+      '#ajax' => array(
+        'callback' => '::addTextureGroupCallback', //array($this, 'addTextureGroupCallback'),
+        //'event' => 'add',
+        'wrapper' => 'texture-table',
+      ),
     ];
     // Add Texture Button //
 
@@ -257,6 +267,21 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     return $form;
   }
 
+  public function addTextureGroup(array &$form, FormStateInterface $form_state){
+    $form_state->setRebuild(TRUE);
+  }
+
+  public function addTextureGroupCallback(array &$form, FormStateInterface $form_state){
+    $form['texture_table']['#rows'][] = [
+      'data' => [
+        $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
+        $this->texture_groups_list[(int)$form['texture_name']['#value']]->name,
+        "delete"
+      ],
+    ];
+    //$form['name']['#value'] = "TTTTT";
+    return $form['texture_table'];
+  }
   /**
    * {@inheritdoc}
    */

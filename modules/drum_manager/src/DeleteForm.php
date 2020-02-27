@@ -42,7 +42,7 @@ class DeleteForm extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     $form = new static(
-      $container->get('drum_manager.storage'),
+      $container->get('drum_manager.drums_storage'),
       $container->get('request_stack')
     );
     $form->setStringTranslation($container->get('string_translation'));

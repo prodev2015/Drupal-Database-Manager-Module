@@ -44,7 +44,7 @@ class AdminTextureGroupsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('drum_manager.storage'),
+      $container->get('drum_manager.texture_groups_storage'),
       $container->get('renderer')
     );
   }
