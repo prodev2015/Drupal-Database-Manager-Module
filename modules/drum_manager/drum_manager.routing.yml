@@ -59,3 +59,12 @@ texture_groups_delete:
     _title: 'Delete texture group'
   requirements:
     _permission: 'delete texture groups content'
+
+#ajax_link_delete_callback:
+#  path: '/examples/ajax-example/ajax-link-callback/{nojs}'
+#  defaults:
+#    _controller: '\Drupal\ajax_example\Controller\AjaxExampleController::ajaxLinkCallback'
+#  requirements:
+#    _permission: 'access content'
+
+

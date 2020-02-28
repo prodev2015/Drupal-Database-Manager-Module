@@ -124,9 +124,9 @@ class InputDemo extends FormBase {
       '#type' => 'select',
       '#title' => $this->t('Favorite color'),
       '#options' => [
-        'red' => $this->t('Red'),
-        'blue' => $this->t('Blue'),
-        'green' => $this->t('Green'),
+        '0' => $this->t('Red'),
+        '1' => $this->t('Blue'),
+        '2' => $this->t('Green'),
       ],
       '#empty_option' => $this->t('-select-'),
       '#description' => $this->t('Select, #type = select'),

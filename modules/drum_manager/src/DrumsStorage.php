@@ -65,6 +65,8 @@ class DrumsStorage extends ControllerBase {
     $result = $this->connection->query('SELECT * FROM {drums} WHERE id = :id', [':id' => $id])
       ->fetchAllAssoc('id');
     if ($result) {
+      if(empty($result[$id]->texture_groups))
+        return null;
       return explode(',', $result[$id]->texture_groups);
     }
     else {
