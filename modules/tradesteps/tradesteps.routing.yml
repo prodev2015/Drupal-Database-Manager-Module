@@ -1,0 +1,7 @@
+tradesteps.form_table_add_row:
+  path: '/form_table_add_row'
+  defaults:
+    _form: 'Drupal\tradesteps\Form\FormTableAddMoreRow'
+    _title: 'Form Table Add More Rows'
+  requirements:
+    _permission: 'access content'

@@ -66,7 +66,7 @@ class DrumsStorage extends ControllerBase {
       ->fetchAllAssoc('id');
     if ($result) {
       if(empty($result[$id]->texture_groups))
-        return null;
+        return [];
       return explode(',', $result[$id]->texture_groups);
     }
     else {

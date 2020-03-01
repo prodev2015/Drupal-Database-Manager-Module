@@ -36,7 +36,6 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
   protected $drums_storage;
   protected $texture_groups_storage;
 
-  protected $texture_groups_list = [];
   /**
    * The current user.
    *
@@ -55,8 +54,6 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    * {@inheritdoc}
    */
   protected $id;
-
-  protected $texture_group_ids = [];
 
   /**
    * {@inheritdoc}
@@ -114,11 +111,35 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     $this->id = $this->request()->get('id');
     $drum = $this->drums_storage->get($this->id);
 
+    $texture_group_ids = $form_state->get("texture_group_ids");
+    if($texture_group_ids === null)
+    {
+      if($drum) {
+        $texture_group_ids = $this->drums_storage->getTextureGroupIds($drum->id);
+      }
+      else
+      {
+        $texture_group_ids = [];
+      }
+      $form_state->set("texture_group_ids", $texture_group_ids);
+    }
+
+    // drum name
     $form['name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Name'),
       '#default_value' => $drum ? $drum->name : '',
     ];
+    //drum name //
+
+
+    // drum model
+    $form['model'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Model'),
+      '#default_value' => $drum ? $drum->model : '',
+    ];
+    // drum model //
 
 
     // texture table
@@ -140,22 +161,17 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     ];
 
     $rows = [];
-    if($drum)
-    {
-      if($form_state->getCompleteForm() == null) {
-        $this->texture_group_ids = $this->drums_storage->getTextureGroupIds($drum->id);
-      }
 
       $i = 0;
-      foreach ($this->texture_group_ids as $id) {
+      foreach ($texture_group_ids as $id) {
         // Row with attributes on the row and some of its cells.
         //$editUrl = Url::fromRoute('drums_edit', ['id' => $content->id]);
         //$deleteUrl = Url::fromRoute('drums_delete', ['id' => $content->id]);
         $content = $this->texture_groups_storage->get($id);
         $form['texture_table'][$i]['id'] = [
-            '#type' => 'label',
-            '#title' => $content->id,
-            '#value' => $content->id,
+          '#type' => 'label',
+          '#title' => $content->id,
+          '#value' => $content->id,
         ];
         $form['texture_table'][$i]['name'] = [
           '#type' => 'label',
@@ -163,26 +179,24 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
           '#value' => $content->id,
         ];
         $form['texture_table'][$i]['delete'] = [
-          '#type' => 'button',
+          '#type' => 'submit',
+          '#name' => $i,
           '#value' => "delete",
+          '#submit' => array('::deleteTextureGroup'),
         ];
         $i++;
       }
-      $form['texture_table']['#value'] = $i;
-    }else
-    {
 
-    }
     // Texture Table //
 
     // Texture Name
-    $this->texture_groups_list = [];
     $texture_group_names_list = [];
+    $texture_groups_to_select = [];
     foreach ($this->texture_groups_storage->getAll()  as $content) {
-      array_push($this->texture_groups_list, $content);
       array_push($texture_group_names_list, $this->t($content->name));
+      array_push($texture_groups_to_select, $content);
     }
-
+    $form_state->set("texture_groups_to_select", $texture_groups_to_select);
     $form['texture_name'] = [
       '#type' => 'select',
       '#title' => $this->t('Texture Name'),
@@ -197,10 +211,10 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
 
     // Add Texture Button
     $form['add_texture_button'] = [
-      '#type' => 'button',
+      '#type' => 'submit',
       '#value' => $this->t("Add Texture"),
       '#name' => $this->t('addTextureButton'),
-      //'#submit' => array($this, 'addTextureGroup'),
+      '#submit' => array('::addTextureGroup'),
       //'#submit' => ['::addTextureGroup'],
       '#ajax' => array(
         'wrapper' => 'texture-table',
@@ -231,58 +245,26 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
    */
 
   public function addTextureGroup(array &$form, FormStateInterface $form_state){
-    $form = $form_state->getCompleteForm();
+    $texture_group_ids = $form_state->get("texture_group_ids");
+    $texture_group_num = $form_state->getValue("texture_name");
+    $texture_groups_to_select = $form_state->get("texture_groups_to_select");
 
-    $table_item_count = count($form_state->getValue("texture_table"));
-
-    $form['texture_table'][$table_item_count]['id'] = [
-      '#type' => 'label',
-      '#title' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-      '#value' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-    ];
-    $form['texture_table'][$table_item_count]['name'] = [
-      '#type' => 'label',
-      '#title' => $this->t($this->texture_groups_list[(int)$form['texture_name']['#value']]->name),
-      '#value' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-    ];
-    $form['texture_table'][$table_item_count]['delete'] = [
-      '#type' => 'button',
-      '#value' => "delete",
-    ];
-    $form['texture_table']['#value'] = $table_item_count + 1;
-
+    array_push($texture_group_ids, $texture_groups_to_select[$texture_group_num]->id);
+    $form_state->set("texture_group_ids", $texture_group_ids);
     $form_state->setRebuild();
-    return $form;
-    //$form_state->setCompleteForm($form_copy);
   }
 
   public function addTextureGroupCallback(array &$form, FormStateInterface $form_state){
-    $form = $form_state->getCompleteForm();
-    array_push($this->texture_group_ids, $this->texture_groups_list[(int)$form['texture_name']['#value']]->id);
-    $table_item_count = count($form_state->getValue("texture_table"));
-
-    $form['texture_table'][$table_item_count]['id'] = [
-      '#type' => 'label',
-      '#title' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-      '#value' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-    ];
-    $form['texture_table'][$table_item_count]['name'] = [
-      '#type' => 'label',
-      '#title' => $this->t($this->texture_groups_list[(int)$form['texture_name']['#value']]->name),
-      '#value' => $this->texture_groups_list[(int)$form['texture_name']['#value']]->id,
-    ];
-    $form['texture_table'][$table_item_count]['delete'] = [
-      '#type' => 'button',
-      '#value' => "delete",
-    ];
-    $form['texture_table']['#value'] = $table_item_count + 1;
-
-    $form_state->setRebuild();
     return $form["texture_table"];
   }
 
-  public function deleteTextureGroup($id) {
-    return false;
+  public function deleteTextureGroup(array &$form, FormStateInterface $form_state) {
+    $removal_index = $form_state->getTriggeringElement()['#name'];
+    $texture_group_ids = $form_state->get("texture_group_ids");
+    array_splice($texture_group_ids, $removal_index, 1);
+    $form_state->set("texture_group_ids", $texture_group_ids);
+    $form_state->setRebuild();
+    //return $form["texture_table"];
   }
   /**
    * {@inheritdoc}
@@ -311,17 +293,18 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
 
     $account = $this->currentUser;
     $name = $form_state->getValue('name');
+    $model = $form_state->getValue('model');
+    $texture_group_ids = $form_state->get("texture_group_ids");
 
-    $uid = $account->id();
     if (!empty($this->id)) {
-      $return = $this->drums_storage->edit($this->id, Html::escape($name));
+      $return = $this->drums_storage->edit($this->id, Html::escape($name), $texture_group_ids, $model);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been edited.'));
       }
     }
     else {
       //$return = $this->storage->add(Html::escape($name), Html::escape($image[0]), $uid);
-      $return = $this->drums_storage->add(Html::escape($name));
+      $return = $this->drums_storage->add(Html::escape($name), $texture_group_ids, $model);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }

@@ -1,0 +1,6 @@
+name: Tradesteps Examples
+description: Examples from OpenWritings.net.
+package: Custom
+
+type: module
+core: 8.x
