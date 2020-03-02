@@ -136,3 +136,27 @@ function drum_manager_preprocess_image_widget(&$variables) {
     $variables['data'][$child] = $element[$child];
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function drum_manager_page_attachments(array &$page) {
+  global $base_root, $base_path;
+  $page['#attached']['drupalSettings']['basePath'] = $base_root . $base_path . drupal_get_path('module', 'drum_manager');
+}
+
+/**
+ * Implements hook_theme().
+ */
+function drum_manager_theme($existing, $type, $theme, $path) {
+
+  $variables = array(
+    'bloque' =>array(
+      'variables' => NULL,
+      'template' => 'bloque',
+    ),
+  );
+
+  return $variables;
+
+}
