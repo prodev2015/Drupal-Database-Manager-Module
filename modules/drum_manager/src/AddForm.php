@@ -170,8 +170,8 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
         $content = $this->texture_groups_storage->get($id);
         $form['texture_table'][$i]['id'] = [
           '#type' => 'label',
-          '#title' => $content->id,
-          '#value' => $content->id,
+          '#title' => $i + 1,
+          '#value' => $i + 1,
         ];
         $form['texture_table'][$i]['name'] = [
           '#type' => 'label',
@@ -183,6 +183,10 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
           '#name' => $i,
           '#value' => "delete",
           '#submit' => array('::deleteTextureGroup'),
+          '#ajax' => array(
+            'wrapper' => 'texture-table',
+            'callback' => '::deleteTextureGroupCallback',
+          ),
         ];
         $i++;
       }
@@ -249,7 +253,14 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     $texture_group_num = $form_state->getValue("texture_name");
     $texture_groups_to_select = $form_state->get("texture_groups_to_select");
 
+    if(in_array($texture_groups_to_select[$texture_group_num]->id, $texture_group_ids))
+    {
+      drupal_set_message("The texture group arealdy exists!");
+      return false;
+    }
+
     array_push($texture_group_ids, $texture_groups_to_select[$texture_group_num]->id);
+
     $form_state->set("texture_group_ids", $texture_group_ids);
     $form_state->setRebuild();
   }
@@ -265,6 +276,10 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     $form_state->set("texture_group_ids", $texture_group_ids);
     $form_state->setRebuild();
     //return $form["texture_table"];
+  }
+
+  public function deleteTextureGroupCallback(array &$form, FormStateInterface $form_state) {
+    return $form["texture_table"];
   }
   /**
    * {@inheritdoc}
