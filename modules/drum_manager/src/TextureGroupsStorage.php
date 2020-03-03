@@ -112,7 +112,7 @@ class TextureGroupsStorage extends ControllerBase
    *   DB insert query.
    *
    */
-  public function add($name, $tum, $snare, $floor, $bass, $thumbnail)
+  public function add($name, $tum, $snare, $floor, $bass, $thumbnail, $material)
   {
     $fields = [
       'name' => $name,
@@ -121,6 +121,7 @@ class TextureGroupsStorage extends ControllerBase
       'floor' => $floor,
       'bass' => $bass,
       'thumbnail' => $thumbnail,
+      'material' => $material,
     ];
     $return_value = NULL;
     try {
@@ -143,7 +144,7 @@ class TextureGroupsStorage extends ControllerBase
    * @param string $name
    *   Drum's name.
    */
-  public function edit($id, $name, $tum, $snare, $floor, $bass, $thumbnail)
+  public function edit($id, $name, $tum, $snare, $floor, $bass, $thumbnail, $material)
   {
     $fields = [
       'name' => $name,
@@ -152,6 +153,7 @@ class TextureGroupsStorage extends ControllerBase
       'floor' => $floor,
       'bass' => $bass,
       'thumbnail' => $thumbnail,
+      'material' => $material,
     ];
     $this->connection->update('texture_groups')
       ->fields($fields)

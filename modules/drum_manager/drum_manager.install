@@ -27,11 +27,18 @@ function drum_manager_schema() {
         'default' => '',
         'description' => "Drum's Name",
       ],
+      'area' => [
+        'type' => 'varchar',
+        'length' => 150,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => "Area",
+      ],
       'texture_groups' => [
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
-        'description' => "texture IDs",
+        'description' => "Texture IDs",
       ],
 
       'model' => [
@@ -39,6 +46,13 @@ function drum_manager_schema() {
         'length' => 255,
         'default' => '',
         'description' => "Drum's Model",
+      ],
+
+      'metal_color' => [
+        'type' => 'varchar',
+        'length' => 6,
+        'default' => 'ffffff',
+        'description' => "Drum's Metal Color",
       ],
     ],
     'primary key' => ['id'],
@@ -91,6 +105,11 @@ function drum_manager_schema() {
           'length' => 255,
           'default' => '',
           'description' => "Thumbnail",
+        ],
+        'material' => [
+          'type' => 'int',
+          'default' => 0,
+          'description' => "Material",
         ],
     ],
     'primary key' => ['id'],

@@ -15,8 +15,8 @@ body {
 
 .panel {
     box-sizing: border-box;
-    width: 400px;
-    height: 300px;
+    width: 600px;
+    height: 400px;
     background: #fff;
     display: flex;
     border-radius: 3px;

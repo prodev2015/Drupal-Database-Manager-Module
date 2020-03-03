@@ -126,11 +126,13 @@ class DrumsStorage extends ControllerBase {
    * @return int|null
    *   DB insert query return value.
    */
-  public function add($name, $texture_groups = null, $model = null) {
+  public function add($name, $area, $texture_groups = null, $model = null, $metal_color = null) {
     $fields = [
       'name' => $name,
+      'area' => $area,
       'texture_groups' => implode(',' ,$texture_groups),
       'model' => $model,
+      'metal_color' => $metal_color,
     ];
     $return_value = NULL;
     try {
@@ -154,11 +156,13 @@ class DrumsStorage extends ControllerBase {
    * @param string $name
    *   Drum's name.
    */
-  public function edit($id, $name, $texture_groups = null, $model = null) {
+  public function edit($id, $name, $area, $texture_groups = null, $model = null, $metal_color = null) {
     $fields = [
       'name' => $name,
+      'area' => $area,
       'texture_groups' => implode(',' , $texture_groups),
       'model' => $model,
+      'metal_color' => $metal_color,
     ];
     $this->connection->update('drums')
       ->fields($fields)

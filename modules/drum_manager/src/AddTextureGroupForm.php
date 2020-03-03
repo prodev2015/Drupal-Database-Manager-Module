@@ -123,6 +123,7 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
       '#type' => 'textfield',
       '#title' => $this->t('Name'),
       '#default_value' => $texture_group ? $texture_group->name : '',
+      '#required' => true
     ];
 
     $form['tum'] = array(
@@ -200,6 +201,17 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
       ),
     );
 
+    $form['texture_material'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Texture Name'),
+      '#options' => [
+        '0' => 'Blue',
+        '1' => 'White',
+        '2' => 'Gray',
+        '3' => 'Green',
+      ],
+    ];
+
     $form['actions'] = [
       '#type' => 'actions',
     ];
@@ -239,16 +251,16 @@ class AddTextureGroupForm extends FormBase implements FormInterface, ContainerIn
     $bass = sizeof($bass) > 0 ? $bass[0] : null;
     $thumbnail = $form_state->getValue('thumbnail');
     $thumbnail = sizeof($thumbnail) > 0 ? $thumbnail[0] : null;
+    $material = $form_state->getValue('texture_material');
 
-    $uid = $account->id();
     if (!empty($this->id)) {
-      $return = $this->storage->edit($this->id, Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail);
+      $return = $this->storage->edit($this->id, Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail, $material);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been edited.'));
       }
     } else {
       //$return = $this->storage->add(Html::escape($name), Html::escape($image[0]), $uid);
-      $return = $this->storage->add(Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail);
+      $return = $this->storage->add(Html::escape($name), $tum, $snare, $floor, $bass, $thumbnail, $material);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }

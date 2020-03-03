@@ -3,8 +3,8 @@
 (function ($, Drupal, drupalSettings) {
 
   console.log("Drupal Settings:" + drupalSettings.basePath);
-  console.log("Drums:" + drupalSettings['drums'][0]['model']);
-  var model_url = drupalSettings['drums'][0]['model'];
+  //console.log("Drums:" + drupalSettings['drums'][0]['model']);
+  //var model_url = drupalSettings['drums'][0]['model'];
   var BasePath = drupalSettings.basePath;
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
@@ -25,10 +25,10 @@
   }
 
   var iframe = document.getElementById('api-frame');
-  var url = model_url;//getParameterByName(model_url);
+  var url = '';//getParameterByName(model_url);
   var prefix = getParameterByName('prefix');
   //var DEFAULT_URLID = 'c632823b6c204797bd9b95dbd9f53a06';
-  var DEFAULT_URLID = '';//'4657516e60e541fab35f6fd76f31a44a';
+  var DEFAULT_URLID = '4657516e60e541fab35f6fd76f31a44a';
   var DEFAULT_PREFIX = 'seat ';
   var CONFIG = {
     urlid: url !== '' ? url : DEFAULT_URLID,

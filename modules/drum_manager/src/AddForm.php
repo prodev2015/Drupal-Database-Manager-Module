@@ -129,8 +129,18 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
       '#type' => 'textfield',
       '#title' => $this->t('Name'),
       '#default_value' => $drum ? $drum->name : '',
+      '#required' => true,
     ];
     //drum name //
+
+    // area
+    $form['area'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Area'),
+      '#default_value' => $drum ? $drum->area : '',
+      '#required' => true,
+    ];
+    // area
 
 
     // drum model
@@ -209,9 +219,7 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     // Texture Name //
 
 
-    $form['actions'] = [
-      '#type' => 'actions',
-    ];
+
 
     // Add Texture Button
     $form['add_texture_button'] = [
@@ -226,6 +234,21 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
       ),
     ];
     // Add Texture Button //
+
+    $form['metal_color'] = [
+      '#type' => 'color',
+      '#title' => $this->t('Metal Color'),
+      '#default_value' => '#ffffff',
+      '#description' => '',
+      '#attributes' => [
+        'style' => 'width:100px; height:100px;',
+      ]
+    ];
+
+
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
 
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -310,16 +333,18 @@ class AddForm extends FormBase implements FormInterface, ContainerInjectionInter
     $name = $form_state->getValue('name');
     $model = $form_state->getValue('model');
     $texture_group_ids = $form_state->get("texture_group_ids");
+    $area = $form_state->getValue('area');
+    $metal_color = substr($form_state->getValue('metal_color'), 1, 6);
 
     if (!empty($this->id)) {
-      $return = $this->drums_storage->edit($this->id, Html::escape($name), $texture_group_ids, $model);
+      $return = $this->drums_storage->edit($this->id, Html::escape($name), Html::escape($area), $texture_group_ids, $model, $metal_color);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been edited.'));
       }
     }
     else {
       //$return = $this->storage->add(Html::escape($name), Html::escape($image[0]), $uid);
-      $return = $this->drums_storage->add(Html::escape($name), $texture_group_ids, $model);
+      $return = $this->drums_storage->add(Html::escape($name), Html::escape($area), $texture_group_ids, $model, $metal_color);
       if ($return) {
         $this->messenger()->addMessage($this->t('Drum has been saved.'));
       }
